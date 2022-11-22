@@ -1,24 +1,44 @@
 import streamlit as st
-import sys
 from rdkit import Chem
 from rdkit.Chem import Draw
-from rdkit.Chem.Draw import IPythonConsole
-from rdkit.Chem import Descriptors, Draw
-from rdkit.Chem import AllChem
-from rdkit import DataStructs
-
+from rdkit.Chem import Descriptors
 import random
 import string
 import pandas as pd
 import csv
 from rdkit.Chem import rdMolDescriptors as Desc
+from dotenv import load_dotenv
 
+from dotenv import load_dotenv
+load_dotenv()
+
+
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+# Import to format the JSON responses
+# ==============================
+import json
+
+# Set configuration parameter: return "https" URLs by setting secure=true  
+# ==============================
+config = cloudinary.config(secure=True)
+
+# Log the configuration
+# ==============================
+print("****1. Set up and configure the SDK:****\nCredentials: ", config.cloud_name, config.api_key, "\n")
+
+def uploadImage(imageName):
+  cloudinary.uploader.upload("pictures/"+imageName+".jpeg",  public_id=imageName, unique_filename = False, overwrite=True)
+  srcURL = cloudinary.CloudinaryImage(imageName).build_url()
+  return srcURL
+  
 name = ''.join(random.choices(string.ascii_uppercase + string.ascii_uppercase, k = 4))
 st.markdown("<h1 style='text-align: center'>Molecular properties predictor</h1>", unsafe_allow_html=True)
 def get2D(smiles):
     mol = Chem.MolFromSmiles(smiles)
-    
-    structure =Draw.MolToImageFile(mol=mol, filename="pictures/"+name+".jpeg")
+    Draw.MolToImageFile(mol=mol, filename="pictures/"+name+".jpeg")
     return name+'.jpeg'
 
 def getDescriptors(smiles):
@@ -51,7 +71,7 @@ submitted = form.form_submit_button("Submit")
 
 if submitted:
     filename = get2D(input)
-    st.image("pictures/"+filename)
+    st.image(uploadImage(name))
     mw,acceptors, tpsa, donors, logp = getDescriptors(input)
 
     

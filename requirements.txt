@@ -1,2 +1,5 @@
 rdkit==2022.9.1
 streamlit==1.13.0
+pandas == 1.5.1
+dotenv = 0.21.0
+cloudinary == 1.30.0
