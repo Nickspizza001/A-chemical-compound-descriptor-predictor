@@ -6,7 +6,7 @@ from rdkit.Chem.Draw import IPythonConsole
 from rdkit.Chem import Descriptors, Draw
 from rdkit.Chem import AllChem
 from rdkit import DataStructs
-import numpy as np
+
 import random
 import string
 import pandas as pd
